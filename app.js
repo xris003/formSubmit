@@ -1,5 +1,4 @@
 const express = require("express");
-const morgan = require("morgan");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
@@ -12,10 +11,10 @@ const app = express();
 // Set security HTTP headers
 app.use(helmet());
 
-console.log(process.env.NODE_ENV);
-if (process.env.NODE_ENV === "development") {
-  app.use(morgan("dev"));
-}
+// console.log(process.env.NODE_ENV);
+// if (process.env.NODE_ENV === "development") {
+//   app.use(morgan("dev"));
+// }
 
 // Limit requests from same API
 const limiter = rateLimit({
@@ -52,13 +51,13 @@ app.use((req, res, next) => {
 app.post("/submit-form", async (req, res) => {
   try {
     // Extract data from the form
-    const { name, email, message } = req.body;
+    const { name, email, subject, phone, message } = req.body;
 
     // Save data to the database
     const connection = await pool.getConnection();
     const result = await connection.query(
-      "INSERT INTO your_table (name, email, message) VALUES (?, ?, ?)",
-      [name, email, message]
+      "INSERT INTO your_table (name, email, subject, phone, message) VALUES (?, ?, ?)",
+      [name, email, subject, phone, message]
     );
     connection.release();
 
