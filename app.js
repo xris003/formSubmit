@@ -5,6 +5,8 @@ const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 
+const queryPromise = require("./server");
+
 const app = express();
 
 // 1) MIDDLEWARES
@@ -46,31 +48,6 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
-});
-
-app.post("/submit-form", async (req, res) => {
-  try {
-    // Extract data from the form
-    const { name, email, subject, phone, message } = req.body;
-
-    // Save data to the database
-    const connection = await pool.getConnection();
-    const result = await connection.query(
-      "INSERT INTO your_table (name, email, subject, phone, message) VALUES (?, ?, ?)",
-      [name, email, subject, phone, message]
-    );
-    connection.release();
-
-    // Send data to the email address
-    // Use nodemailer or any other email sending service
-
-    res
-      .status(200)
-      .json({ success: true, message: "Form submitted successfully." });
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ success: false, message: "Internal server error." });
-  }
 });
 
 module.exports = app;
