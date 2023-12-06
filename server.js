@@ -1,6 +1,7 @@
 const mysql2 = require("mysql2");
 // const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
+const sendEmail = require("./email");
 
 // dotenv.config({ path: "./config.env" });
 
@@ -52,6 +53,12 @@ app.post("/submit-form", async (req, res) => {
       "INSERT INTO submitform (name_col, email_col, subject_col, phone_col, msg_col) VALUES (?, ?, ?, ?, ?)";
 
     const result = await queryPromise(SQL, newinfo);
+    await sendEmail({
+      email: req.body.email,
+      subject: "New Enquiry Details",
+      newinfo,
+    });
+
     res.json({ id: result.insertId, name, email, subject, phone, message });
   } catch (error) {
     console.error("Error:", error);
