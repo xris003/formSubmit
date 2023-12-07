@@ -53,11 +53,13 @@ app.post("/submit-form", async (req, res) => {
       "INSERT INTO submitform (name_col, email_col, subject_col, phone_col, msg_col) VALUES (?, ?, ?, ?, ?)";
 
     const result = await queryPromise(SQL, newinfo);
+
     await sendEmail({
-      email: req.body.email,
+      email: newinfo.email,
       subject: "New Enquiry Details",
-      newinfo,
+      SQL,
     });
+    console.log(SQL);
 
     res.json({ id: result.insertId, name, email, subject, phone, message });
   } catch (error) {
