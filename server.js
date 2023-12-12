@@ -57,6 +57,7 @@ app.post("/submit-form", async (req, res) => {
     await sendEmail({
       email: newinfo.email,
       subject: "New Enquiry Details",
+      message: "Your message content here",
     });
 
     res.json({ id: result.insertId, name, email, subject, phone, message });
