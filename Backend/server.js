@@ -42,6 +42,14 @@ function queryPromise(sql, values = []) {
   });
 }
 
+app.get("/", (req, res) => {
+  const enq = "SELECT * FROM formsubmit_db.submitform";
+  pool.query(enq, (err, data) => {
+    if (err) return res.json(err);
+    return res.json(data);
+  });
+});
+
 app.post("/submit-form", async (req, res) => {
   try {
     // Extract data from the form
