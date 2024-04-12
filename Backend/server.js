@@ -1,9 +1,9 @@
 const mysql2 = require("mysql2");
-// const dotenv = require("dotenv");
+const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const sendEmail = require("./email");
 
-// dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./config.env" });
 
 const app = require("./app");
 
@@ -16,12 +16,14 @@ app.listen(port, () => {
 });
 
 const pool = mysql2.createConnection({
-  host: "127.0.0.1",
-  port: "3306",
-  user: "root",
-  password: "07026305657",
-  database: "formsubmit_db",
+  host: process.env.HOST,
+  port: process.env.DB_PORT,
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE,
 });
+
+console.log(process.env.HOST);
 
 pool.connect((err) => {
   if (err) {
